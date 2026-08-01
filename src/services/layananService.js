@@ -1,31 +1,35 @@
 const { Layanan, PengajuanLayanan } = require('../models');
 
+const mockLayanan = [
+  {
+    id: 1,
+    nama_layanan: 'Surat Keterangan Usaha (SKU)',
+    deskripsi: 'Pelayanan penerbitan surat keterangan bagi warga yang memiliki usaha mikro/kecil untuk keperluan perbankan atau legalitas.',
+    syarat: '1. Fotokopi KTP Pemohon\n2. Fotokopi Kartu Keluarga\n3. Surat Pengantar dari RT/RW setempat\n4. Foto lokasi tempat usaha'
+  },
+  {
+    id: 2,
+    nama_layanan: 'Surat Keterangan Domisili',
+    deskripsi: 'Surat bukti tempat tinggal resmi warga di wilayah Desa Tenjonagara.',
+    syarat: '1. Fotokopi KTP\n2. Fotokopi KK\n3. Pengantar RT/RW'
+  },
+  {
+    id: 3,
+    nama_layanan: 'Surat Keterangan Tidak Mampu (SKTM)',
+    deskripsi: 'Surat keterangan bantuan pendidikan/kesehatan untuk keluarga pra-sejahtera.',
+    syarat: '1. Fotokopi KTP & KK Pemohon\n2. Surat Pengantar RT/RW dengan stempel\n3. Kartu KIS/BPJS jika ada'
+  }
+];
+
 const getAllLayanan = async () => {
   try {
-    return await Layanan.findAll({
+    const list = await Layanan.findAll({
       order: [['created_at', 'ASC']]
     });
+    if (list && list.length > 0) return list;
+    throw new Error('No DB rows');
   } catch (error) {
-    return [
-      {
-        id: 1,
-        nama_layanan: 'Surat Keterangan Usaha (SKU)',
-        deskripsi: 'Pelayanan penerbitan surat keterangan bagi warga yang memiliki usaha mikro/kecil untuk keperluan perbankan atau legalitas.',
-        syarat: '1. Fotokopi KTP Pemohon\n2. Fotokopi Kartu Keluarga\n3. Surat Pengantar dari RT/RW setempat\n4. Foto lokasi tempat usaha'
-      },
-      {
-        id: 2,
-        nama_layanan: 'Surat Keterangan Domisili',
-        deskripsi: 'Surat bukti tempat tinggal resmi warga di wilayah Desa Tenjonagara.',
-        syarat: '1. Fotokopi KTP\n2. Fotokopi KK\n3. Pengantar RT/RW'
-      },
-      {
-        id: 3,
-        nama_layanan: 'Surat Keterangan Tidak Mampu (SKTM)',
-        deskripsi: 'Surat keterangan bantuan pendidikan/kesehatan untuk keluarga pra-sejahtera.',
-        syarat: '1. Fotokopi KTP & KK Pemohon\n2. Surat Pengantar RT/RW dengan stempel\n3. Kartu KIS/BPJS jika ada'
-      }
-    ];
+    return mockLayanan;
   }
 };
 

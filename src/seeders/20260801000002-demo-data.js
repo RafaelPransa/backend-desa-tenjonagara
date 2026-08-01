@@ -66,7 +66,78 @@ module.exports = {
       }
     ]);
 
-    // 4. Seed statistik_penduduk
+    // 4. Seed potensi_desa
+    await queryInterface.bulkInsert('potensi_desa', [
+      {
+        kategori: 'pertanian',
+        nama: 'Perkebunan Teh & Padi Sawah Organik',
+        deskripsi: 'Komoditas utama Desa Tenjonagara dengan hasil panen padi berkualitas tinggi serta perkebunan teh produktif di lereng Cigalontang.',
+        gambar_url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+        created_at: new Date()
+      },
+      {
+        kategori: 'umkm',
+        nama: 'Kerajinan Olahan Kopi & Makanan Olahan Singkong',
+        deskripsi: 'Kelompok tani dan warga memproduksi kopi olahan asli Cigalontang dan aneka olahan singkong bernilai jual tinggi.',
+        gambar_url: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80',
+        created_at: new Date()
+      },
+      {
+        kategori: 'wisata',
+        nama: 'Wisata Alam & Camping Ground Curug Tenjonagara',
+        deskripsi: 'Destinasi wisata panorama alam pegunungan, udara sejuk, dan aliran sungai jernih yang alami.',
+        gambar_url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+        created_at: new Date()
+      }
+    ]);
+
+    // 5. Seed layanan
+    await queryInterface.bulkInsert('layanan', [
+      {
+        nama_layanan: 'Surat Keterangan Usaha (SKU)',
+        deskripsi: 'Pelayanan penerbitan surat keterangan bagi warga yang memiliki usaha mikro/kecil untuk keperluan perbankan atau legalitas.',
+        syarat: '1. Fotokopi KTP Pemohon\n2. Fotokopi Kartu Keluarga\n3. Surat Pengantar dari RT/RW setempat\n4. Foto lokasi tempat usaha',
+        created_at: new Date()
+      },
+      {
+        nama_layanan: 'Surat Keterangan Domisili',
+        deskripsi: 'Surat bukti tempat tinggal resmi warga di wilayah Desa Tenjonagara.',
+        syarat: '1. Fotokopi KTP\n2. Fotokopi KK\n3. Pengantar RT/RW',
+        created_at: new Date()
+      },
+      {
+        nama_layanan: 'Surat Keterangan Tidak Mampu (SKTM)',
+        deskripsi: 'Surat keterangan bantuan pendidikan/kesehatan untuk keluarga pra-sejahtera.',
+        syarat: '1. Fotokopi KTP & KK Pemohon\n2. Surat Pengantar RT/RW dengan stempel\n3. Kartu KIS/BPJS jika ada',
+        created_at: new Date()
+      }
+    ]);
+
+    // 6. Seed berita
+    await queryInterface.bulkInsert('berita', [
+      {
+        judul: 'Pelatihan Kewirausahaan UMKM Pemuda Desa Tenjonagara',
+        slug: 'pelatihan-kewirausahaan-umkm-pemuda-desa-tenjonagara',
+        konten: 'Pemerintah Desa Tenjonagara menggelar pelatihan digital marketing dan pengemasan produk UMKM lokal bagi generasi muda. Kegiatan ini diikuti oleh 40 peserta dari perwakilan karang taruna setiap dusun.',
+        gambar_url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+        penulis_id: 1,
+        status: 'published',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        judul: 'Kerja Bakti Masal Pembersihan Saluran Irigasi Sawah Dusun 1',
+        slug: 'kerja-bakti-masal-pembersihan-saluran-irigasi-sawah-dusun-1',
+        konten: 'Antusiasme warga dalam memperlancar pasokan air menjelang musim tanam padi tercermin dari tingginya partisipasi dalam kerja bakti pembersihan gorong-gorong sawah.',
+        gambar_url: 'https://images.unsplash.com/photo-1592417817098-8f3d6eb231fc?auto=format&fit=crop&w=800&q=80',
+        penulis_id: 1,
+        status: 'published',
+        created_at: new Date(),
+        updated_at: new Date()
+      }
+    ]);
+
+    // 7. Seed statistik_penduduk
     await queryInterface.bulkInsert('statistik_penduduk', [
       {
         tahun: 2026,
@@ -81,6 +152,9 @@ module.exports = {
 
   down: async (queryInterface) => {
     await queryInterface.bulkDelete('statistik_penduduk', null, {});
+    await queryInterface.bulkDelete('berita', null, {});
+    await queryInterface.bulkDelete('layanan', null, {});
+    await queryInterface.bulkDelete('potensi_desa', null, {});
     await queryInterface.bulkDelete('perangkat_desa', null, {});
     await queryInterface.bulkDelete('profil_desa', null, {});
     await queryInterface.bulkDelete('users', null, {});
