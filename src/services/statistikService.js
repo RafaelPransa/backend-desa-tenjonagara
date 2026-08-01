@@ -12,10 +12,18 @@ const getStatistikPenduduk = async () => {
       {
         id: 1,
         tahun: 2026,
-        jumlah_total: 4250,
-        jumlah_laki: 2180,
-        jumlah_perempuan: 2070,
-        jumlah_kk: 1120
+        jumlah_total: 6146,
+        jumlah_laki: 3120,
+        jumlah_perempuan: 3026,
+        jumlah_kk: 2262,
+        rata_anggota_keluarga: 2.7,
+        pendidikan: [
+          { tingkat: 'SD / Sederajat', jumlah: 2317, persentase: 70.5 },
+          { tingkat: 'SMP / Sederajat', jumlah: 587, persentase: 17.9 },
+          { tingkat: 'SMA / Sederajat', jumlah: 332, persentase: 10.1 },
+          { tingkat: 'Diploma I (D1)', jumlah: 47, persentase: 1.4 },
+          { tingkat: 'Sarjana (S1)', jumlah: 5, persentase: 0.15 }
+        ]
       }
     ];
   }
