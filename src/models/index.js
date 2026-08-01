@@ -11,6 +11,7 @@ const StatistikPenduduk = require('./StatistikPenduduk')(sequelize, DataTypes);
 const Apbdes = require('./Apbdes')(sequelize, DataTypes);
 const PesanKontak = require('./PesanKontak')(sequelize, DataTypes);
 const PerangkatDesa = require('./PerangkatDesa')(sequelize, DataTypes);
+const BangunanDesa = require('./BangunanDesa')(sequelize, DataTypes);
 
 // Relationships / Associations
 User.hasMany(Berita, { foreignKey: 'penulis_id', as: 'berita' });
@@ -30,7 +31,8 @@ const db = {
   StatistikPenduduk,
   Apbdes,
   PesanKontak,
-  PerangkatDesa
+  PerangkatDesa,
+  BangunanDesa
 };
 
 module.exports = db;

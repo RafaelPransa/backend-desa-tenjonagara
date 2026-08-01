@@ -14,6 +14,7 @@ const layananRoutes = require('./routes/layananRoutes');
 const statistikRoutes = require('./routes/statistikRoutes');
 const kontakRoutes = require('./routes/kontakRoutes');
 const perangkatRoutes = require('./routes/perangkatRoutes');
+const bangunanRoutes = require('./routes/bangunanRoutes');
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use('/api/layanan', layananRoutes);
 app.use('/api/statistik', statistikRoutes);
 app.use('/api/kontak', kontakRoutes);
 app.use('/api/perangkat-desa', perangkatRoutes);
+app.use('/api/bangunan-desa', bangunanRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {
