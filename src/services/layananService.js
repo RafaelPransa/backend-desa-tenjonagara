@@ -21,13 +21,25 @@ const mockLayanan = [
   }
 ];
 
+const ensureDefaultLayanan = async () => {
+  try {
+    const count = await Layanan.count();
+    if (count === 0) {
+      await Layanan.bulkCreate(mockLayanan);
+    }
+  } catch (e) {
+    // console.error('Failed to auto seed layanan', e);
+  }
+};
+
 const getAllLayanan = async () => {
   try {
+    await ensureDefaultLayanan();
     const list = await Layanan.findAll({
       order: [['created_at', 'ASC']]
     });
     if (list && list.length > 0) return list;
-    throw new Error('No DB rows');
+    return mockLayanan;
   } catch (error) {
     return mockLayanan;
   }
@@ -58,9 +70,14 @@ const createPengajuan = async (data) => {
   if (data.nik.length !== 16) {
     throw { statusCode: 400, message: 'NIK harus terdiri dari 16 digit angka.' };
   }
+
+  await ensureDefaultLayanan();
+
   try {
     return await PengajuanLayanan.create(data);
   } catch (error) {
+    console.error('Error creating pengajuan in DB:', error.message);
+    // Fallback if DB fails
     return {
       id: Date.now(),
       ...data,
@@ -90,6 +107,7 @@ const updateStatusPengajuan = async (id, status) => {
 
 const getLayananById = async (id) => {
   try {
+    await ensureDefaultLayanan();
     const item = await Layanan.findByPk(id);
     if (item) return item;
     throw new Error('Not found');
