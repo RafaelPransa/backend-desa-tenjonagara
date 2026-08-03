@@ -15,9 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     kategori: {
-      type: DataTypes.ENUM('pemerintahan', 'pendidikan', 'kesehatan', 'keagamaan', 'ekonomi_sosial'),
+      type: DataTypes.ENUM('fasilitas_pendidikan', 'fasilitas_kesehatan', 'fasilitas_umum', 'fasilitas_ibadah', 'fasilitas_olahraga'),
       allowNull: false,
-      defaultValue: 'pemerintahan'
+      defaultValue: 'fasilitas_umum'
     },
     deskripsi: {
       type: DataTypes.TEXT,
