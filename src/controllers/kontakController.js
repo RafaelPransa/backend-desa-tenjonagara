@@ -19,4 +19,13 @@ const getAllPesan = async (req, res, next) => {
   }
 };
 
-module.exports = { kirimPesan, getAllPesan };
+const deletePesan = async (req, res, next) => {
+  try {
+    await kontakService.deletePesan(req.params.id);
+    return sendSuccess(res, null, 'Pesan kontak berhasil dihapus.');
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { kirimPesan, getAllPesan, deletePesan };

@@ -25,4 +25,14 @@ const getAllPesan = async () => {
   }
 };
 
-module.exports = { kirimPesan, getAllPesan };
+const deletePesan = async (id) => {
+  try {
+    const item = await PesanKontak.findByPk(id);
+    if (item) await item.destroy();
+    return true;
+  } catch (error) {
+    return true;
+  }
+};
+
+module.exports = { kirimPesan, getAllPesan, deletePesan };
