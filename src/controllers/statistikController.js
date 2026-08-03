@@ -37,9 +37,19 @@ const createApbdes = async (req, res, next) => {
   }
 };
 
+const updateStatistik = async (req, res, next) => {
+  try {
+    const updated = await statistikService.updateStatistik(req.params.id || 1, req.body);
+    return sendSuccess(res, updated, 'Data statistik penduduk berhasil diperbarui.');
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getStatistik,
   getApbdes,
   createStatistik,
-  createApbdes
+  createApbdes,
+  updateStatistik
 };

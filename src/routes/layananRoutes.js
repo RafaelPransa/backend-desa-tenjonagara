@@ -4,6 +4,7 @@ const layananController = require('../controllers/layananController');
 const { authenticateToken } = require('../middlewares/auth');
 
 router.get('/', layananController.getAllLayanan);
+router.get('/:id', layananController.getLayananById);
 router.post('/pengajuan', layananController.submitPengajuan); // Public submission
 
 // Admin Protected

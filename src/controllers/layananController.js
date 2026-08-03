@@ -64,8 +64,18 @@ const updateStatusPengajuan = async (req, res, next) => {
   }
 };
 
+const getLayananById = async (req, res, next) => {
+  try {
+    const data = await layananService.getLayananById(req.params.id);
+    return sendSuccess(res, data, 'Berhasil mendapatkan detail layanan.');
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllLayanan,
+  getLayananById,
   createLayanan,
   updateLayanan,
   deleteLayanan,

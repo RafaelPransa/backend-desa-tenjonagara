@@ -4,6 +4,7 @@ const perangkatController = require('../controllers/perangkatController');
 const { authenticateToken } = require('../middlewares/auth');
 
 router.get('/', perangkatController.getAll);
+router.get('/:id', perangkatController.getById);
 
 // Admin Protected
 router.post('/', authenticateToken, perangkatController.create);

@@ -63,8 +63,22 @@ const deletePerangkat = async (id) => {
   return true;
 };
 
+const getPerangkatById = async (id) => {
+  try {
+    const item = await PerangkatDesa.findByPk(id);
+    if (item) return item;
+    throw new Error('Not found');
+  } catch (error) {
+    const list = await getAllPerangkat();
+    const found = list.find((p) => p.id == id);
+    if (!found) throw { statusCode: 404, message: 'Perangkat desa tidak ditemukan.' };
+    return found;
+  }
+};
+
 module.exports = {
   getAllPerangkat,
+  getPerangkatById,
   createPerangkat,
   updatePerangkat,
   deletePerangkat

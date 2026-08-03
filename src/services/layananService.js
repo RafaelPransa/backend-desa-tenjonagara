@@ -88,8 +88,21 @@ const updateStatusPengajuan = async (id, status) => {
   return pengajuan;
 };
 
+const getLayananById = async (id) => {
+  try {
+    const item = await Layanan.findByPk(id);
+    if (item) return item;
+    throw new Error('Not found');
+  } catch (error) {
+    const found = mockLayanan.find((l) => l.id == id);
+    if (!found) throw { statusCode: 404, message: 'Layanan tidak ditemukan.' };
+    return found;
+  }
+};
+
 module.exports = {
   getAllLayanan,
+  getLayananById,
   createLayanan,
   updateLayanan,
   deleteLayanan,

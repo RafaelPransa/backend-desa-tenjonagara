@@ -37,4 +37,13 @@ const remove = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, create, update, remove };
+const getById = async (req, res, next) => {
+  try {
+    const data = await perangkatService.getPerangkatById(req.params.id);
+    return sendSuccess(res, data, 'Berhasil mendapatkan detail perangkat desa.');
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getAll, getById, create, update, remove };
