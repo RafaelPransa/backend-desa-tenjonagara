@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     dokumen_url: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true
     },
     status: {

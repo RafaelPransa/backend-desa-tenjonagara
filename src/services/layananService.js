@@ -73,19 +73,15 @@ const createPengajuan = async (data) => {
 
   await ensureDefaultLayanan();
 
-  try {
-    return await PengajuanLayanan.create(data);
-  } catch (error) {
-    console.error('Error creating pengajuan in DB:', error.message);
-    // Fallback if DB fails
-    return {
-      id: Date.now(),
-      ...data,
-      status: 'pending',
-      created_at: new Date()
-    };
-  }
+  // Pastikan layanan_id bertipe integer
+  const payload = {
+    ...data,
+    layanan_id: parseInt(data.layanan_id, 10)
+  };
+
+  return await PengajuanLayanan.create(payload);
 };
+
 
 const getAllPengajuan = async () => {
   try {
