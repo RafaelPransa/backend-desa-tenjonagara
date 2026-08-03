@@ -18,6 +18,17 @@ let inMemoryStatistik = [
       { tingkat: 'Tamat Diploma III', jumlah: 35, persentase: 0.57 },
       { tingkat: 'Tamat S1', jumlah: 470, persentase: 7.65 },
       { tingkat: 'Tamat S2', jumlah: 14, persentase: 0.23 }
+    ],
+    pekerjaan: [
+      { pekerjaan: 'PNS, POLRI & TNI', jumlah: 45, persentase: 0.73 },
+      { pekerjaan: 'Karyawan', jumlah: 650, persentase: 10.58 },
+      { pekerjaan: 'Buruh', jumlah: 1200, persentase: 19.52 },
+      { pekerjaan: 'Petani / Pekebun', jumlah: 2100, persentase: 34.17 },
+      { pekerjaan: 'Peternakan', jumlah: 180, persentase: 2.93 },
+      { pekerjaan: 'Wiraswasta', jumlah: 750, persentase: 12.2 },
+      { pekerjaan: 'Pelajar/Mahasiswa', jumlah: 820, persentase: 13.34 },
+      { pekerjaan: 'Belum/tidak bekerja', jumlah: 350, persentase: 5.69 },
+      { pekerjaan: 'Pekerjaan lainnya', jumlah: 51, persentase: 0.83 }
     ]
   }
 ];
@@ -35,6 +46,7 @@ const getStatistikPenduduk = async () => {
           ...memory,
           ...plain,
           pendidikan: memory.pendidikan || plain.pendidikan,
+          pekerjaan: memory.pekerjaan || plain.pekerjaan,
           rata_anggota_keluarga: memory.rata_anggota_keluarga || plain.rata_anggota_keluarga
         };
       });
