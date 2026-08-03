@@ -61,8 +61,21 @@ const deletePotensi = async (id) => {
   return true;
 };
 
+const getPotensiById = async (id) => {
+  try {
+    const item = await PotensiDesa.findByPk(id);
+    if (item) return item;
+    throw new Error('Not found');
+  } catch (error) {
+    const found = mockPotensi.find((p) => p.id == id);
+    if (!found) throw { statusCode: 404, message: 'Potensi desa tidak ditemukan.' };
+    return found;
+  }
+};
+
 module.exports = {
   getAllPotensi,
+  getPotensiById,
   createPotensi,
   updatePotensi,
   deletePotensi

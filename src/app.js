@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 const errorHandler = require('./middlewares/errorHandler');
 
 // Import routes
@@ -15,14 +16,20 @@ const statistikRoutes = require('./routes/statistikRoutes');
 const kontakRoutes = require('./routes/kontakRoutes');
 const perangkatRoutes = require('./routes/perangkatRoutes');
 const bangunanRoutes = require('./routes/bangunanRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 
 // Middlewares
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // CORS configuration
 const allowedOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
@@ -44,6 +51,7 @@ app.use('/api/statistik', statistikRoutes);
 app.use('/api/kontak', kontakRoutes);
 app.use('/api/perangkat-desa', perangkatRoutes);
 app.use('/api/bangunan-desa', bangunanRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {

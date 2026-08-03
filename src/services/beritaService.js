@@ -55,14 +55,17 @@ const getAllBerita = async (status = null) => {
 
 const getBeritaBySlug = async (slug) => {
   try {
+    const isNum = !isNaN(slug) && !isNaN(parseFloat(slug));
+    const where = isNum ? { id: parseInt(slug, 10) } : { slug };
+
     const berita = await Berita.findOne({
-      where: { slug },
+      where,
       include: [{ model: User, as: 'penulis', attributes: ['id', 'nama', 'email'] }]
     });
     if (berita) return berita;
     throw new Error('Not found');
   } catch (error) {
-    const found = mockBerita.find((b) => b.slug === slug);
+    const found = mockBerita.find((b) => b.slug === slug || b.id == slug);
     if (!found) throw { statusCode: 404, message: 'Berita tidak ditemukan.' };
     return found;
   }
