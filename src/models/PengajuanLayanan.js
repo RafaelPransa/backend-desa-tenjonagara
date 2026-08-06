@@ -21,6 +21,26 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(16),
       allowNull: false
     },
+    tempat_lahir: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    tanggal_lahir: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    jenis_kelamin: {
+      type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    alamat: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    agama: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
     keterangan: {
       type: DataTypes.TEXT,
       allowNull: true
