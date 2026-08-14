@@ -147,10 +147,10 @@ Kini, Desa Tenjonagara dikenal sebagai desa yang mandiri, aktif, dan progresif, 
     await queryInterface.bulkInsert('statistik_penduduk', [
       {
         tahun: 2026,
-        jumlah_total: 6146,
-        jumlah_laki: 3120,
-        jumlah_perempuan: 3026,
-        jumlah_kk: 2262,
+        jumlah_total: 7312,
+        jumlah_laki: 3835,
+        jumlah_perempuan: 3477,
+        jumlah_kk: 2553,
         created_at: new Date()
       }
     ]);
