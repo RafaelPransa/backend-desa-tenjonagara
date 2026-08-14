@@ -17,6 +17,7 @@ const kontakRoutes = require('./routes/kontakRoutes');
 const perangkatRoutes = require('./routes/perangkatRoutes');
 const bangunanRoutes = require('./routes/bangunanRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const sitemapRoutes = require('./routes/sitemapRoutes');
 
 const app = express();
 
@@ -52,6 +53,10 @@ app.use('/api/kontak', kontakRoutes);
 app.use('/api/perangkat-desa', perangkatRoutes);
 app.use('/api/bangunan-desa', bangunanRoutes);
 app.use('/api/upload', uploadRoutes);
+
+// Sitemap
+app.use('/', sitemapRoutes);
+app.use('/api', sitemapRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {
