@@ -8,32 +8,37 @@ const { authenticateToken } = require('../middlewares/auth');
 const { sendSuccess, sendError } = require('../utils/response');
 
 // ─────────────────────────────────────────────────────────
-// Cloudinary Setup (aktif jika env CLOUDINARY_CLOUD_NAME tersedia)
+// Cloudinary Setup
 // ─────────────────────────────────────────────────────────
-const isCloudinaryConfigured = !!(
-  process.env.CLOUDINARY_CLOUD_NAME &&
-  process.env.CLOUDINARY_API_KEY &&
-  process.env.CLOUDINARY_API_SECRET
-);
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME?.trim();
+const apiKey    = process.env.CLOUDINARY_API_KEY?.trim();
+const apiSecret = process.env.CLOUDINARY_API_SECRET?.trim();
+const cloudinaryUrl = process.env.CLOUDINARY_URL?.trim();
+
+const isCloudinaryConfigured = !!((cloudName && apiKey && apiSecret) || cloudinaryUrl);
 
 let cloudinary = null;
 if (isCloudinaryConfigured) {
   cloudinary = require('cloudinary').v2;
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key:    process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-  console.log('☁️  Upload mode: Cloudinary (cloud storage)');
+  if (cloudinaryUrl) {
+    // Otomatis konfigurasi dari CLOUDINARY_URL
+    cloudinary.config();
+  } else {
+    cloudinary.config({
+      cloud_name: cloudName,
+      api_key:    apiKey,
+      api_secret: apiSecret,
+      secure:     true
+    });
+  }
+  console.log('☁️  Upload mode: Cloudinary active');
 } else {
-  console.log('💾 Upload mode: Disk lokal (development) — set CLOUDINARY_* env untuk production');
+  console.log('💾 Upload mode: Disk lokal (fallback)');
 }
 
 // ─────────────────────────────────────────────────────────
 // Rate Limiter
 // ─────────────────────────────────────────────────────────
-
-// Rate limiting for public uploads (max 15 uploads per 15 minutes per IP)
 const publicUploadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 15,
@@ -46,18 +51,15 @@ const publicUploadLimiter = rateLimit({
 });
 
 // ─────────────────────────────────────────────────────────
-// Local Disk Storage (Fallback untuk Development)
+// Local Disk Storage (Fallback)
 // ─────────────────────────────────────────────────────────
-
 const uploadDir = path.join(__dirname, '../../public/uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const diskStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
+  destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -65,14 +67,11 @@ const diskStorage = multer.diskStorage({
   }
 });
 
-// Memory storage untuk Cloudinary (file dibaca ke buffer, lalu dikirim ke cloud)
 const memoryStorage = multer.memoryStorage();
 
 // ─────────────────────────────────────────────────────────
 // File Filters
 // ─────────────────────────────────────────────────────────
-
-// Hanya gambar (untuk upload admin)
 const fileFilterImage = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|webp|gif/;
   const extValid = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -81,7 +80,6 @@ const fileFilterImage = (req, file, cb) => {
   cb(new Error('Format file tidak didukung. Hanya file gambar (.jpg, .jpeg, .png, .webp, .gif) yang diperbolehkan!'));
 };
 
-// Gambar + PDF (untuk pengajuan layanan publik)
 const fileFilterPublic = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|webp|pdf/;
   const extName = path.extname(file.originalname).toLowerCase();
@@ -92,26 +90,19 @@ const fileFilterPublic = (req, file, cb) => {
   cb(new Error('Format tidak didukung. Hanya .jpg, .png, .webp, atau .pdf yang diperbolehkan.'));
 };
 
-// ─────────────────────────────────────────────────────────
-// Multer Instances
-// ─────────────────────────────────────────────────────────
-
 const uploadImage = multer({
   storage: isCloudinaryConfigured ? memoryStorage : diskStorage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Max 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: fileFilterImage
 });
 
 const uploadPublic = multer({
   storage: isCloudinaryConfigured ? memoryStorage : diskStorage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Max 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: fileFilterPublic
 });
 
-// ─────────────────────────────────────────────────────────
-// Helper: Upload buffer ke Cloudinary
-// ─────────────────────────────────────────────────────────
-
+// Helper: Upload buffer stream ke Cloudinary
 const uploadBufferToCloudinary = (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
@@ -144,13 +135,10 @@ router.post('/', authenticateToken, (req, res, next) => {
     }
 
     try {
-      // ── Mode Cloudinary ──
       if (isCloudinaryConfigured) {
         const result = await uploadBufferToCloudinary(req.file.buffer, {
           folder: 'desa-tenjonagara/images',
-          resource_type: 'image',
-          use_filename: false,
-          unique_filename: true,
+          resource_type: 'auto'
         });
 
         return sendSuccess(res, {
@@ -161,7 +149,7 @@ router.post('/', authenticateToken, (req, res, next) => {
         }, 'Gambar berhasil diunggah ke Cloudinary.', 201);
       }
 
-      // ── Mode Disk Lokal (development) ──
+      // Mode Disk Lokal
       const host = req.get('host');
       const protocol = req.protocol;
       const fileUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
@@ -178,7 +166,7 @@ router.post('/', authenticateToken, (req, res, next) => {
   });
 });
 
-// POST /api/upload/public — Upload dokumen publik (Pengajuan layanan, tanpa auth)
+// POST /api/upload/public — Upload dokumen publik
 router.post('/public', publicUploadLimiter, (req, res, next) => {
   uploadPublic.single('dokumen')(req, res, async (err) => {
     if (err) {
@@ -196,14 +184,11 @@ router.post('/public', publicUploadLimiter, (req, res, next) => {
     }
 
     try {
-      // ── Mode Cloudinary ──
       if (isCloudinaryConfigured) {
         const isPdf = req.file.mimetype === 'application/pdf';
         const result = await uploadBufferToCloudinary(req.file.buffer, {
           folder: 'desa-tenjonagara/dokumen',
-          resource_type: isPdf ? 'raw' : 'image',
-          use_filename: false,
-          unique_filename: true,
+          resource_type: isPdf ? 'raw' : 'auto'
         });
 
         return sendSuccess(res, {
@@ -216,7 +201,7 @@ router.post('/public', publicUploadLimiter, (req, res, next) => {
         }, 'Dokumen berhasil diunggah ke Cloudinary.', 201);
       }
 
-      // ── Mode Disk Lokal (development) ──
+      // Mode Disk Lokal
       const host = req.get('host');
       const protocol = req.protocol;
       const fileUrl = `${protocol}://${host}/uploads/${req.file.filename}`;

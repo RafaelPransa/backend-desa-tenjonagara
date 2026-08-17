@@ -22,6 +22,9 @@ const sitemapRoutes = require('./routes/sitemapRoutes');
 
 const app = express();
 
+// Trust proxy (diperlukan karena Express berjalan di belakang Nginx)
+app.set('trust proxy', 1);
+
 // Middlewares
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
