@@ -28,7 +28,7 @@ Kini, Desa Tenjonagara dikenal sebagai desa yang mandiri, aktif, dan progresif, 
 
       visi: 'Mewujudkan Desa Tenjonagara yang lebih maju berprestasi, berbudaya dan kreatif melalui peningkatan sumber daya manusia, kemampuan ekonomi dan kepedulian sosial masyarakat dan pemantapan pembangunan di berbagai bidang berlandaskan religius, kultural dan budaya daerah.',
       misi: '1. Meningkatkan profesionalisme pelayanan publik. \n2. Meningkatkan kualitas sumber daya manusia bagi aparatur pemerintah desa. \n3. Meningkatkan pembangunan fisik dan nonfisik di berbagai bidang. \n4. Meningkatkan ketersediaan dan kualitas insfrastruktur pemerintahan desa. \n5. Meningkatkan partisipasi swadaya masyarakat dan sektor swasta dalam kegiatan pembangunan dan kegiatan kemsyarakatan desa. \n6. Menggali potensi potensi desa dalam rangka peningkatan pendapatan asli daerah.',
-      luas_wilayah: '14.52 km²',
+      luas_wilayah: '490 Hektar',
 
       jumlah_dusun: 4,
       jumlah_rt: 22,
@@ -86,13 +86,6 @@ Kini, Desa Tenjonagara dikenal sebagai desa yang mandiri, aktif, dan progresif, 
         nama: 'Kerajinan Olahan Kopi & Makanan Olahan Singkong',
         deskripsi: 'Kelompok tani dan warga memproduksi kopi olahan asli Cigalontang dan aneka olahan singkong bernilai jual tinggi.',
         gambar_url: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80',
-        created_at: new Date()
-      },
-      {
-        kategori: 'wisata',
-        nama: 'Wisata Alam & Camping Ground Curug Tenjonagara',
-        deskripsi: 'Destinasi wisata panorama alam pegunungan, udara sejuk, dan aliran sungai jernih yang alami.',
-        gambar_url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
         created_at: new Date()
       }
     ]);

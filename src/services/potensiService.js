@@ -14,13 +14,6 @@ const mockPotensi = [
     nama: 'Kerajinan Olahan Kopi & Makanan Olahan Singkong',
     deskripsi: 'Kelompok tani dan warga memproduksi kopi olahan asli Cigalontang dan aneka olahan singkong bernilai jual tinggi.',
     gambar_url: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 3,
-    kategori: 'wisata',
-    nama: 'Wisata Alam & Camping Ground Curug Tenjonagara',
-    deskripsi: 'Destinasi wisata panorama alam pegunungan, udara sejuk, dan aliran sungai jernih yang alami.',
-    gambar_url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'
   }
 ];
 

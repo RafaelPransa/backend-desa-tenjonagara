@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true
     },
     kategori: {
-      type: DataTypes.ENUM('pertanian', 'umkm', 'wisata'),
+      type: DataTypes.STRING,
       allowNull: false
     },
     nama: {
