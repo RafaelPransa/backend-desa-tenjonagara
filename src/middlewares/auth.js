@@ -11,21 +11,26 @@ const authenticateToken = async (req, res, next) => {
       return sendError(res, 'Akses ditolak. Token otentikasi tidak ditemukan.', 401);
     }
 
-    const secret = process.env.JWT_SECRET || 'super_secret_jwt_key_tenjonagara_2026';
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      console.error('CRITICAL: JWT_SECRET environment variable is not defined!');
+      return sendError(res, 'Konfigurasi keamanan server belum lengkap.', 500);
+    }
+
     const decoded = jwt.verify(token, secret);
 
     let user = null;
     try {
       user = await User.findByPk(decoded.id);
     } catch (e) {
-      // Ignore DB query errors in fallback mode
+      // Database might be in decoupled/fallback mode
     }
 
     req.user = user || {
-      id: decoded.id || 1,
-      email: decoded.email || 'admin@tenjonagara.desa.id',
-      role: decoded.role || 'admin',
-      nama: decoded.nama || 'Admin Desa'
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role,
+      nama: decoded.nama || 'Pengguna'
     };
 
     next();

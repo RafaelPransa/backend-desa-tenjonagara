@@ -13,7 +13,10 @@ const login = async (email, password) => {
     throw { statusCode: 400, message: 'Email atau password salah.' };
   }
 
-  const secret = process.env.JWT_SECRET || 'super_secret_jwt_key_tenjonagara_2026';
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw { statusCode: 500, message: 'Konfigurasi keamanan server (JWT_SECRET) belum diatur.' };
+  }
   const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
 
   const token = jwt.sign(
