@@ -31,8 +31,8 @@ Kini, Desa Tenjonagara dikenal sebagai desa yang mandiri, aktif, dan progresif, 
       luas_wilayah: '490 Hektar',
 
       jumlah_dusun: 4,
-      jumlah_rt: 22,
-      jumlah_rw: 6,
+      jumlah_rt: 38,
+      jumlah_rw: 8,
       updated_at: new Date()
     }]);
 

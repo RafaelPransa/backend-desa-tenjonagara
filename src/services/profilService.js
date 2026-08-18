@@ -15,8 +15,8 @@ Kini, Desa Tenjonagara dikenal sebagai desa yang mandiri, aktif, dan progresif, 
       misi: '1. Meningkatkan profesionalisme pelayanan publik. \n2. Meningkatkan kualitas sumber daya manusia bagi aparatur pemerintah desa. \n3. Meningkatkan pembangunan fisik dan nonfisik di berbagai bidang. \n4. Meningkatkan ketersediaan dan kualitas insfrastruktur pemerintahan desa. \n5. Meningkatkan partisipasi swadaya masyarakat dan sektor swasta dalam kegiatan pembangunan dan kegiatan kemsyarakatan desa. \n6. Menggali potensi potensi desa dalam rangka peningkatan pendapatan asli daerah.',
       luas_wilayah: '490 Hektar',
       jumlah_dusun: 4,
-      jumlah_rt: 22,
-      jumlah_rw: 6
+      jumlah_rt: 38,
+      jumlah_rw: 8
     };
   }
   return profil;
