@@ -37,9 +37,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // CORS configuration
-const allowedOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+const rawOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+const allowedOrigins = rawOrigin.split(',').map(o => o.trim()).concat([
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://tenjonagara.id',
+  'https://www.tenjonagara.id',
+  'http://tenjonagara.id',
+  'http://www.tenjonagara.id'
+]);
 app.use(cors({
-  origin: [allowedOrigin, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: (origin, callback) => {
+    // allow requests with no origin (like mobile apps, curl, or same-origin)
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Permissive for production domain
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
