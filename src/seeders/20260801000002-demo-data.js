@@ -10,7 +10,7 @@ module.exports = {
     await queryInterface.bulkInsert('users', [{
       id: 1,
       nama: 'Administrator Desa Tenjonagara',
-      email: 'admin@tenjonagara.desa.id',
+      email: 'admin@tenjonagara.id',
       password_hash: adminPassword,
       role: 'super_admin',
       created_at: new Date(),
