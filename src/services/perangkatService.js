@@ -11,7 +11,7 @@ const getAllPerangkat = async () => {
     return [
       {
         id: 1,
-        nama: 'Asep Saepulloh, S.IP',
+        nama: 'Heri Priana',
         jabatan: 'Kepala Desa',
         no_hp: '081234567890',
         foto_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80',

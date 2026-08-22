@@ -39,7 +39,7 @@ Kini, Desa Tenjonagara dikenal sebagai desa yang mandiri, aktif, dan progresif, 
     // 3. Seed perangkat_desa
     await queryInterface.bulkInsert('perangkat_desa', [
       {
-        nama: 'Asep Saepulloh, S.IP',
+        nama: 'Heri Priana',
         jabatan: 'Kepala Desa',
         no_hp: '081234567890',
         foto_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80',
