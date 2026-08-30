@@ -121,6 +121,28 @@ const getLayananById = async (id) => {
   }
 };
 
+const trackPengajuanByNik = async (nik) => {
+  if (!nik || nik.trim().length !== 16 || isNaN(nik.trim())) {
+    throw { statusCode: 400, message: 'Nomor NIK harus terdiri dari 16 digit angka.' };
+  }
+
+  const results = await PengajuanLayanan.findAll({
+    where: { nik: nik.trim() },
+    include: [{ model: Layanan, as: 'layanan', attributes: ['id', 'nama_layanan', 'deskripsi'] }],
+    order: [['created_at', 'DESC']]
+  });
+
+  return results.map((item) => ({
+    id: item.id,
+    layanan_nama: item.layanan?.nama_layanan || 'Surat Keterangan',
+    nama_pemohon: item.nama_pemohon,
+    nik_masked: item.nik && item.nik.length === 16 ? `${item.nik.slice(0, 6)}******${item.nik.slice(12)}` : '******',
+    status: item.status,
+    keterangan: item.keterangan,
+    created_at: item.created_at
+  }));
+};
+
 module.exports = {
   getAllLayanan,
   getLayananById,
@@ -130,5 +152,6 @@ module.exports = {
   createPengajuan,
   getAllPengajuan,
   updateStatusPengajuan,
-  deletePengajuan
+  deletePengajuan,
+  trackPengajuanByNik
 };

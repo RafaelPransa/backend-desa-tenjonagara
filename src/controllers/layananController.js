@@ -82,6 +82,16 @@ const getLayananById = async (req, res, next) => {
   }
 };
 
+const trackPengajuan = async (req, res, next) => {
+  try {
+    const { nik } = req.body;
+    const data = await layananService.trackPengajuanByNik(nik);
+    return sendSuccess(res, data, 'Status permohonan surat berhasil didapatkan.');
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllLayanan,
   getLayananById,
@@ -91,5 +101,6 @@ module.exports = {
   submitPengajuan,
   getAllPengajuan,
   updateStatusPengajuan,
-  deletePengajuan
+  deletePengajuan,
+  trackPengajuan
 };
