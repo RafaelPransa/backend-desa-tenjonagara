@@ -10,29 +10,6 @@ const generateSlug = (text) => {
     .replace(/\-\-+/g, '-');
 };
 
-const mockBerita = [
-  {
-    id: 1,
-    judul: 'Pelatihan Kewirausahaan UMKM Pemuda Desa Tenjonagara',
-    slug: 'pelatihan-kewirausahaan-umkm-pemuda-desa-tenjonagara',
-    konten: 'Pemerintah Desa Tenjonagara menggelar pelatihan digital marketing dan pengemasan produk UMKM lokal bagi generasi muda. Kegiatan ini diikuti oleh 40 peserta dari perwakilan karang taruna setiap dusun.',
-    gambar_url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
-    status: 'published',
-    created_at: new Date(),
-    penulis: { nama: 'Admin Desa Tenjonagara' }
-  },
-  {
-    id: 2,
-    judul: 'Kerja Bakti Masal Pembersihan Saluran Irigasi Sawah Dusun 1',
-    slug: 'kerja-bakti-masal-pembersihan-saluran-irigasi-sawah-dusun-1',
-    konten: 'Antusiasme warga dalam memperlancar pasokan air menjelang musim tanam padi tercermin dari tingginya partisipasi dalam kerja bakti pembersihan gorong-gorong sawah.',
-    gambar_url: 'https://images.unsplash.com/photo-1592417817098-8f3d6eb231fc?auto=format&fit=crop&w=800&q=80',
-    status: 'published',
-    created_at: new Date(),
-    penulis: { nama: 'Admin Desa Tenjonagara' }
-  }
-];
-
 const getAllBerita = async (status = null) => {
   try {
     const where = {};
@@ -43,32 +20,23 @@ const getAllBerita = async (status = null) => {
       order: [['created_at', 'DESC']],
       include: [{ model: User, as: 'penulis', attributes: ['id', 'nama', 'email'] }]
     });
-    if (list && list.length > 0) return list;
-    throw new Error('No DB rows');
+    return list || [];
   } catch (error) {
-    if (status) {
-      return mockBerita.filter((b) => b.status === status);
-    }
-    return mockBerita;
+    console.error('Error fetching berita from database:', error);
+    return [];
   }
 };
 
 const getBeritaBySlug = async (slug) => {
-  try {
-    const isNum = !isNaN(slug) && !isNaN(parseFloat(slug));
-    const where = isNum ? { id: parseInt(slug, 10) } : { slug };
+  const isNum = !isNaN(slug) && !isNaN(parseFloat(slug));
+  const where = isNum ? { id: parseInt(slug, 10) } : { slug };
 
-    const berita = await Berita.findOne({
-      where,
-      include: [{ model: User, as: 'penulis', attributes: ['id', 'nama', 'email'] }]
-    });
-    if (berita) return berita;
-    throw new Error('Not found');
-  } catch (error) {
-    const found = mockBerita.find((b) => b.slug === slug || b.id == slug);
-    if (!found) throw { statusCode: 404, message: 'Berita tidak ditemukan.' };
-    return found;
-  }
+  const berita = await Berita.findOne({
+    where,
+    include: [{ model: User, as: 'penulis', attributes: ['id', 'nama', 'email'] }]
+  });
+  if (!berita) throw { statusCode: 404, message: 'Berita tidak ditemukan.' };
+  return berita;
 };
 
 const createBerita = async (data, penulis_id) => {
