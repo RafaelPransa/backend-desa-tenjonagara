@@ -77,37 +77,64 @@ const getStatistikPenduduk = async () => {
   }
 };
 
+const defaultApbdes = [
+  {
+    tahun: 2025,
+    bidang: 'Bidang Pembangunan Desa',
+    pagu_anggaran: '673522000.00',
+    realisasi: '673522000.00'
+  },
+  {
+    tahun: 2025,
+    bidang: 'Bidang Pemberdayaan Masyarakat',
+    pagu_anggaran: '359000000.00',
+    realisasi: '359000000.00'
+  },
+  {
+    tahun: 2025,
+    bidang: 'Bidang Pendidikan dan Kesehatan',
+    pagu_anggaran: '75000000.00',
+    realisasi: '75000000.00'
+  },
+  {
+    tahun: 2025,
+    bidang: 'Bidang Operasional Pemerintahan',
+    pagu_anggaran: '40000000.00',
+    realisasi: '40000000.00'
+  },
+  {
+    tahun: 2025,
+    bidang: 'Lain-lain (termasuk BLT dan biaya tidak terduga)',
+    pagu_anggaran: '187200000.00',
+    realisasi: '187200000.00'
+  }
+];
+
+const ensureDefaultApbdes = async () => {
+  try {
+    const existing = await Apbdes.findAll();
+    if (
+      existing.length === 0 ||
+      existing.some((e) => e.pagu_anggaran === '450000000.00' && e.tahun === 2026)
+    ) {
+      await Apbdes.destroy({ where: {} });
+      await Apbdes.bulkCreate(defaultApbdes);
+    }
+  } catch (e) {
+    // ignore
+  }
+};
+
 const getApbdes = async () => {
   try {
+    await ensureDefaultApbdes();
     const data = await Apbdes.findAll({
-      order: [['tahun', 'DESC']]
+      order: [['tahun', 'DESC'], ['id', 'ASC']]
     });
     if (data.length > 0) return data;
-    throw new Error('No data');
+    return defaultApbdes.map((item, idx) => ({ ...item, id: idx + 1 }));
   } catch (error) {
-    return [
-      {
-        id: 1,
-        tahun: 2026,
-        bidang: 'Penyelenggaraan Pemerintahan Desa',
-        pagu_anggaran: '450000000.00',
-        realisasi: '380000000.00'
-      },
-      {
-        id: 2,
-        tahun: 2026,
-        bidang: 'Pelaksanaan Pembangunan Desa',
-        pagu_anggaran: '680000000.00',
-        realisasi: '520000000.00'
-      },
-      {
-        id: 3,
-        tahun: 2026,
-        bidang: 'Pembinaan & Pemberdayaan Masyarakat',
-        pagu_anggaran: '210000000.00',
-        realisasi: '175000000.00'
-      }
-    ];
+    return defaultApbdes.map((item, idx) => ({ ...item, id: idx + 1 }));
   }
 };
 
@@ -116,7 +143,31 @@ const createStatistik = async (data) => {
 };
 
 const createApbdes = async (data) => {
-  return await Apbdes.create(data);
+  return await Apbdes.create({
+    tahun: parseInt(data.tahun, 10) || new Date().getFullYear(),
+    bidang: data.bidang,
+    pagu_anggaran: data.pagu_anggaran,
+    realisasi: data.realisasi || 0
+  });
+};
+
+const updateApbdes = async (id, data) => {
+  const item = await Apbdes.findByPk(id);
+  if (!item) throw { statusCode: 404, message: 'Data APBDes tidak ditemukan.' };
+  await item.update({
+    tahun: data.tahun ? parseInt(data.tahun, 10) : item.tahun,
+    bidang: data.bidang || item.bidang,
+    pagu_anggaran: data.pagu_anggaran !== undefined ? data.pagu_anggaran : item.pagu_anggaran,
+    realisasi: data.realisasi !== undefined ? data.realisasi : item.realisasi
+  });
+  return item;
+};
+
+const deleteApbdes = async (id) => {
+  const item = await Apbdes.findByPk(id);
+  if (!item) throw { statusCode: 404, message: 'Data APBDes tidak ditemukan.' };
+  await item.destroy();
+  return true;
 };
 
 const updateStatistik = async (id, data) => {
@@ -151,5 +202,7 @@ module.exports = {
   getApbdes,
   createStatistik,
   createApbdes,
+  updateApbdes,
+  deleteApbdes,
   updateStatistik
 };

@@ -37,6 +37,24 @@ const createApbdes = async (req, res, next) => {
   }
 };
 
+const updateApbdes = async (req, res, next) => {
+  try {
+    const updated = await statistikService.updateApbdes(req.params.id, req.body);
+    return sendSuccess(res, updated, 'Data APBDES berhasil diperbarui.');
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteApbdes = async (req, res, next) => {
+  try {
+    await statistikService.deleteApbdes(req.params.id);
+    return sendSuccess(res, null, 'Data APBDES berhasil dihapus.');
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateStatistik = async (req, res, next) => {
   try {
     const updated = await statistikService.updateStatistik(req.params.id || 1, req.body);
@@ -51,5 +69,7 @@ module.exports = {
   getApbdes,
   createStatistik,
   createApbdes,
+  updateApbdes,
+  deleteApbdes,
   updateStatistik
 };

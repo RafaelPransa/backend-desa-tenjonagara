@@ -11,5 +11,7 @@ router.post('/penduduk', authenticateToken, statistikController.createStatistik)
 router.put('/penduduk', authenticateToken, statistikController.updateStatistik);
 router.put('/penduduk/:id', authenticateToken, statistikController.updateStatistik);
 router.post('/apbdes', authenticateToken, statistikController.createApbdes);
+router.put('/apbdes/:id', authenticateToken, statistikController.updateApbdes);
+router.delete('/apbdes/:id', authenticateToken, statistikController.deleteApbdes);
 
 module.exports = router;
