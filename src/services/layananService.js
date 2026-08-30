@@ -101,6 +101,13 @@ const updateStatusPengajuan = async (id, status) => {
   return pengajuan;
 };
 
+const deletePengajuan = async (id) => {
+  const pengajuan = await PengajuanLayanan.findByPk(id);
+  if (!pengajuan) throw { statusCode: 404, message: 'Pengajuan layanan tidak ditemukan.' };
+  await pengajuan.destroy();
+  return true;
+};
+
 const getLayananById = async (id) => {
   try {
     await ensureDefaultLayanan();
@@ -122,5 +129,6 @@ module.exports = {
   deleteLayanan,
   createPengajuan,
   getAllPengajuan,
-  updateStatusPengajuan
+  updateStatusPengajuan,
+  deletePengajuan
 };

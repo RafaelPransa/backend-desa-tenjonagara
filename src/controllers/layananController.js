@@ -64,6 +64,15 @@ const updateStatusPengajuan = async (req, res, next) => {
   }
 };
 
+const deletePengajuan = async (req, res, next) => {
+  try {
+    await layananService.deletePengajuan(req.params.id);
+    return sendSuccess(res, null, 'Pengajuan layanan berhasil dihapus.');
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getLayananById = async (req, res, next) => {
   try {
     const data = await layananService.getLayananById(req.params.id);
@@ -81,5 +90,6 @@ module.exports = {
   deleteLayanan,
   submitPengajuan,
   getAllPengajuan,
-  updateStatusPengajuan
+  updateStatusPengajuan,
+  deletePengajuan
 };

@@ -26,5 +26,6 @@ router.put('/:id', authenticateToken, layananController.updateLayanan);
 router.delete('/:id', authenticateToken, layananController.deleteLayanan);
 router.get('/pengajuan/all', authenticateToken, layananController.getAllPengajuan);
 router.patch('/pengajuan/:id/status', authenticateToken, layananController.updateStatusPengajuan);
+router.delete('/pengajuan/:id', authenticateToken, layananController.deletePengajuan);
 
 module.exports = router;
