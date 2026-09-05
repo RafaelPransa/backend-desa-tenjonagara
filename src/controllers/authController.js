@@ -27,4 +27,27 @@ const getMe = async (req, res, next) => {
   }
 };
 
-module.exports = { login, getMe };
+const changePassword = async (req, res, next) => {
+  try {
+    const { current_password, new_password } = req.body;
+    const result = await authService.changePassword(
+      req.user.id,
+      current_password,
+      new_password
+    );
+    return sendSuccess(res, result, 'Password berhasil diperbarui.');
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateProfile = async (req, res, next) => {
+  try {
+    const result = await authService.updateProfile(req.user.id, req.body);
+    return sendSuccess(res, result, 'Profil pengguna berhasil diperbarui.');
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { login, getMe, changePassword, updateProfile };

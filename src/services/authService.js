@@ -36,4 +36,65 @@ const login = async (email, password) => {
   };
 };
 
-module.exports = { login };
+const changePassword = async (userId, currentPassword, newPassword) => {
+  if (!currentPassword || !newPassword) {
+    throw { statusCode: 400, message: 'Password saat ini dan password baru wajib diisi.' };
+  }
+
+  if (newPassword.length < 6) {
+    throw { statusCode: 400, message: 'Password baru minimal harus terdiri dari 6 karakter.' };
+  }
+
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw { statusCode: 404, message: 'Akun pengguna tidak ditemukan.' };
+  }
+
+  const isPasswordValid = await bcrypt.compare(currentPassword, user.password_hash);
+  if (!isPasswordValid) {
+    throw { statusCode: 400, message: 'Password saat ini yang Anda masukkan salah.' };
+  }
+
+  const isSamePassword = await bcrypt.compare(newPassword, user.password_hash);
+  if (isSamePassword) {
+    throw { statusCode: 400, message: 'Password baru tidak boleh sama dengan password lama.' };
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const newHash = await bcrypt.hash(newPassword, salt);
+
+  await user.update({ password_hash: newHash });
+
+  return { message: 'Password berhasil diperbarui.' };
+};
+
+const updateProfile = async (userId, data) => {
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw { statusCode: 404, message: 'Akun pengguna tidak ditemukan.' };
+  }
+
+  const updates = {};
+  if (data.nama && data.nama.trim()) {
+    updates.nama = data.nama.trim();
+  }
+  if (data.email && data.email.trim()) {
+    const trimmedEmail = data.email.trim().toLowerCase();
+    const existing = await User.findOne({ where: { email: trimmedEmail } });
+    if (existing && existing.id !== user.id) {
+      throw { statusCode: 400, message: 'Email tersebut sudah digunakan oleh akun lain.' };
+    }
+    updates.email = trimmedEmail;
+  }
+
+  await user.update(updates);
+
+  return {
+    id: user.id,
+    nama: user.nama,
+    email: user.email,
+    role: user.role
+  };
+};
+
+module.exports = { login, changePassword, updateProfile };
